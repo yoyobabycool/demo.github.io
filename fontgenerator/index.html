@@ -12,8 +12,8 @@
 
 .word {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 30%;
+  left: 30%;
   transform: translate(-50%, -50%);
   display: flex;
   cursor: grab;
@@ -22,7 +22,7 @@
 .word img {
   width: 50px;
   height:50px;
-  margin: 10% 1% 1% 1%;
+  margin: 1% 1% 1% 1%;
   
 }
 .bg{
@@ -65,7 +65,37 @@ document.addEventListener('DOMContentLoaded', () => {
     isDragging = false;
     wordContainer.style.cursor = 'grab';
   });
+    wordContainer.addEventListener('touchstart', startDragging);
+  function startDragging(e) {
+    e.preventDefault();
 
+    if (e.touches) {
+      initialX = e.touches[0].clientX;
+      initialY = e.touches[0].clientY;
+    } else {
+      initialX = e.clientX;
+      initialY = e.clientY;
+    }
+
+    isDragging = true;
+    wordContainer.style.cursor = 'grabbing';
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove);
+
+    document.addEventListener('mouseup', stopDragging);
+    document.addEventListener('touchend', stopDragging);
+  }
+  function stopDragging() {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('touchmove', handleMove);
+
+    document.removeEventListener('mouseup', stopDragging);
+    document.removeEventListener('touchend', stopDragging);
+  }
 
 
   function generateWord() {
