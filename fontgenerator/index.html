@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <title>Custom Font Generator</title>
+  
+<style>
+.container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.word {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  cursor: grab;
+}
+
+.word img {
+  width: 50px;
+  height:50px;
+  margin: 10% 1% 1% 1%;
+  
+}
+.bg{
+width: 500px;
+  height: 749px;
+}
+</style>
+</head>
+
+<body >
+<div class="container">
+  <h1>Devara Font Generator</h1>
+ <input type="text" id="inputText" placeholder="Enter a word">
+  <div class="bg" style="background-image: url('devara.jpg') ">
+  <div id="wordContainer" class="word"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const inputText = document.getElementById('inputText');
+  const wordContainer = document.getElementById('wordContainer');
+
+  inputText.addEventListener('input', generateWord);
+  let isDragging = false;
+
+  wordContainer.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    wordContainer.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const x = e.clientX;
+    const y = e.clientY;
+    wordContainer.style.left = `${x}px`;
+    wordContainer.style.top = `${y}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+  });
+
+
+
+  function generateWord() {
+    const text = inputText.value.toUpperCase();
+    wordContainer.innerHTML = '';
+
+    for (const char of text) {
+      if (char >= 'A' && char <= 'Z') {
+        const img = document.createElement('img');
+        img.src = `letters/${char}.png`;
+        img.alt = char;
+        wordContainer.appendChild(img);
+      }
+    }
+  }
+});
+
+
+</script>
+
+</body>
+</html>
