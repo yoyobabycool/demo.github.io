@@ -47,46 +47,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
   inputText.addEventListener('input', generateWord);
   let isDragging = false;
-
-
-  wordContainer.addEventListener('mousedown', startDragging);
-    wordContainer.addEventListener('touchstart', startDragging);
-  function startDragging(e) {
-    e.preventDefault();
-
-    if (e.touches) {
-      initialX = e.touches[0].clientX;
-      initialY = e.touches[0].clientY;
-    } else {
-      initialX = e.clientX;
-      initialY = e.clientY;
-    }
-
+  
+  wordContainer.addEventListener('mousedown', (e) => {
     isDragging = true;
     wordContainer.style.cursor = 'grabbing';
+  });
 
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove);
-
-    document.addEventListener('mouseup', stopDragging);
-    document.addEventListener('touchend', stopDragging);
-  }
-  function stopDragging() {
-    isDragging = false;
-    wordContainer.style.cursor = 'grab';
-
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('touchmove', handleMove);
-
-    document.removeEventListener('mouseup', stopDragging);
-    document.removeEventListener('touchend', stopDragging);
-  }
-	  function handleMove(e) {
+  document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     const x = e.clientX;
     const y = e.clientY;
     wordContainer.style.left = `${x}px`;
     wordContainer.style.top = `${y}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+  });
+  document.addEventListener('touchstart', startDragging);
+  document.addEventListener('touchmove', handleMove);
+  document.addEventListener('touchend', stopDragging);
+
+  function startDragging(e) {
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+
+    const containerRect = wordContainer.getBoundingClientRect();
+
+    if (
+      touchX >= containerRect.left &&
+      touchX <= containerRect.right &&
+      touchY >= containerRect.top &&
+      touchY <= containerRect.bottom
+    ) {
+      isDragging = true;
+      wordContainer.style.cursor = 'grabbing';
+    }
+  }
+
+  function handleMove(e) {
+    if (!isDragging) return;
+
+    const touch = e.touches[0];
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+
+    wordContainer.style.left = touchX + 'px';
+    wordContainer.style.top = touchY + 'px';
+  }
+
+  function stopDragging() {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
   }
   function generateWord() {
     const text = inputText.value.toUpperCase();
