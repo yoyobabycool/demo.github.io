@@ -48,23 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
   inputText.addEventListener('input', generateWord);
   let isDragging = false;
 
-  wordContainer.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    wordContainer.style.cursor = 'grabbing';
-  });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    const x = e.clientX;
-    const y = e.clientY;
-    wordContainer.style.left = `${x}px`;
-    wordContainer.style.top = `${y}px`;
-  });
-
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    wordContainer.style.cursor = 'grab';
-  });
+  wordContainer.addEventListener('mousedown', startDragging);
     wordContainer.addEventListener('touchstart', startDragging);
   function startDragging(e) {
     e.preventDefault();
@@ -97,25 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.removeEventListener('touchend', stopDragging);
   }
 	  function handleMove(e) {
-    const offsetX = e.touches ? e.touches[0].clientX - initialX : e.clientX - initialX;
-    const offsetY = e.touches ? e.touches[0].clientY - initialY : e.clientY - initialY;
-
-    const newX = wordContainer.offsetLeft + offsetX;
-    const newY = wordContainer.offsetTop + offsetY;
-    wordContainer.style.left = `${newX}px`;
-    wordContainer.style.top = `${newY}px`;
+    if (!isDragging) return;
+    const x = e.clientX;
+    const y = e.clientY;
+    wordContainer.style.left = `${x}px`;
+    wordContainer.style.top = `${y}px`;
   }
-  function stopDragging() {
-    isDragging = false;
-    wordContainer.style.cursor = 'grab';
-
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('touchmove', handleMove);
-
-    document.removeEventListener('mouseup', stopDragging);
-    document.removeEventListener('touchend', stopDragging);
-  }
-
   function generateWord() {
     const text = inputText.value.toUpperCase();
     wordContainer.innerHTML = '';
