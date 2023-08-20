@@ -96,7 +96,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.removeEventListener('mouseup', stopDragging);
     document.removeEventListener('touchend', stopDragging);
   }
+	  function handleMove(e) {
+    const offsetX = e.touches ? e.touches[0].clientX - initialX : e.clientX - initialX;
+    const offsetY = e.touches ? e.touches[0].clientY - initialY : e.clientY - initialY;
 
+    const newX = wordContainer.offsetLeft + offsetX;
+    const newY = wordContainer.offsetTop + offsetY;
+    wordContainer.style.left = `${newX}px`;
+    wordContainer.style.top = `${newY}px`;
+  }
+  function stopDragging() {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('touchmove', handleMove);
+
+    document.removeEventListener('mouseup', stopDragging);
+    document.removeEventListener('touchend', stopDragging);
+  }
 
   function generateWord() {
     const text = inputText.value.toUpperCase();
