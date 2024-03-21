@@ -76,6 +76,7 @@
     const numberInput = document.getElementById('number-input');
     const displayName = document.getElementById('display-name');
     const displayNumber = document.getElementById('display-number');
+	 const wordContainer = document.getElementById('display-name');
 
     $(document).ready(function() {
         new CircleType(document.getElementById('name-input')).radius(800);
@@ -114,6 +115,68 @@
         // Code to copy the jersey image
         alert('Copy image function will be implemented here.');
     }
+	let isDragging = false;
+  
+  wordContainer.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    wordContainer.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const x = e.clientX;
+    const y = e.clientY;
+    wordContainer.style.left = `${x}px`;
+    wordContainer.style.top = `${y}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+  });
+  document.addEventListener('touchstart', startDragging);
+  document.addEventListener('touchmove', handleMove);
+  document.addEventListener('touchend', stopDragging);
+
+  function startDragging(e) {
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+
+    const containerRect = wordContainer.getBoundingClientRect();
+
+    if (
+      touchX >= containerRect.left &&
+      touchX <= containerRect.right &&
+      touchY >= containerRect.top &&
+      touchY <= containerRect.bottom
+    ) {
+      isDragging = true;
+      wordContainer.style.cursor = 'grabbing';
+    }
+  }
+
+  function handleMove(e) {
+    if (!isDragging) return;
+
+    const touch = e.touches[0];
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+
+    wordContainer.style.left = touchX + 'px';
+    wordContainer.style.top = touchY + 'px';
+  }
+
+  function stopDragging() {
+    isDragging = false;
+    wordContainer.style.cursor = 'grab';
+  }
+  function generateWord() {
+    const text = inputText.value.toUpperCase();
+    wordContainer.innerHTML = '';
+	}
 </script>
 
 </body>
