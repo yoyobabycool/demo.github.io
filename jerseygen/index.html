@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Cricket Jersey</title>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- Add FontAwesome library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    #jersey-container {
+        position: relative;
+    }
+    #jersey-image {
+        width: 400px;
+    }
+    #name-input, #number-input, #size {
+        margin-top: 10px;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #name-input {
+        margin-bottom: 10px;
+    }
+    #display-name, #display-number {
+        position: absolute;
+        font-weight: bold;
+    }
+    #display-name {
+        color: white;
+        top: 200px;
+        left: 150px;
+        text-transform: uppercase;
+        font-size: 20px;
+    }
+    #display-number {
+        top: 226px;
+        left: 155px;
+        font-size: 100px;
+        color: black;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+    .icon {
+        position: absolute;
+        bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div id="jersey-container">
+    <img id="jersey-image" src="cricket_jersey_back.jpg" alt="Cricket Jersey">
+    <input type="text" id="name-input" placeholder="Enter name">
+    <input type="number" id="size" name="size" min="10" max="45" value="20"/>
+    <input type="text" id="number-input" placeholder="Enter number">
+    <span id="display-name"></span>
+    <span id="display-number"></span>
+    <!-- Add download and copy icons -->
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/peterhry/CircleType@2.3.1/dist/circletype.min.js"></script>
+<script>
+    const nameInput = document.getElementById('name-input');
+    const numberInput = document.getElementById('number-input');
+    const displayName = document.getElementById('display-name');
+    const displayNumber = document.getElementById('display-number');
+
+    $(document).ready(function() {
+        new CircleType(document.getElementById('name-input')).radius(800);
+        $('#display-name').draggable({ containment: '#jersey-container', scroll: false });
+        $('#display-number').draggable({ containment: '#jersey-container', scroll: false });
+
+        $('#size').on('input', function() {
+            let newSize = $(this).val();
+            displayName.style.fontSize = newSize + 'px';
+        });
+    });
+
+    nameInput.addEventListener('input', () => {
+        displayName.textContent = nameInput.value.toUpperCase();
+        adjustNamePosition();
+    });
+
+    function adjustNamePosition() {
+        const maxLength = 10; // Maximum length for name
+        const nameLength = nameInput.value.length;
+        const offsetX = (maxLength - nameLength) * 3; // Adjust this value as needed
+
+        displayName.style.left = `${150 + offsetX}px`;
+    }
+
+    numberInput.addEventListener('input', () => {
+        displayNumber.textContent = numberInput.value;
+    });
+
+    function downloadImage() {
+        // Code to download the jersey image
+        alert('Download image function will be implemented here.');
+    }
+
+    function copyImage() {
+        // Code to copy the jersey image
+        alert('Copy image function will be implemented here.');
+    }
+</script>
+
+</body>
+</html>
